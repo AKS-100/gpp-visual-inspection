@@ -1,0 +1,561 @@
+/*
+ * GPP Visual Inspection & Smart Manufacturing Analytics
+ * Design system — Dark Industrial Corporate Theme Override
+ *
+ * Automatically injected by app/theme.py when st.session_state.gpp_theme_mode == "dark".
+ * Overrides light theme design tokens and specific hardcoded light colors across components.
+ */
+
+/* ================================================================ */
+/* 1. Design tokens (Dark Industrial Palette)                       */
+/* ================================================================ */
+:root {
+    /* Backgrounds */
+    --bg-primary:   #0F171E !important;
+    --bg-surface:   #18222C !important;
+    --bg-muted:     #212E3B !important;
+    --bg-inset:     #131C24 !important;
+    --bg-navbar:    #0A1117 !important;
+    --bg-navbar-hover: #14202B !important;
+
+    /* Borders */
+    --border:        #2D3F50 !important;
+    --border-strong: #415A71 !important;
+    --border-accent: #E0B048 !important;
+
+    /* Text */
+    --text-primary:   #F0F4F8 !important;
+    --text-secondary: #B4C6D8 !important;
+    --text-muted:     #73899E !important;
+
+    /* Accents */
+    --accent-teal:       #2490D0 !important;
+    --accent-teal-hover: #49A8E2 !important;
+    --accent-gold:       #E0B048 !important;
+    --accent-gold-hover: #F1C564 !important;
+    --accent-gold-light: #2A2314 !important;
+
+    /* Status */
+    --status-running:    #3BD175 !important;
+    --status-running-bg: #132B1E !important;
+    --status-idle:       #F3B231 !important;
+    --status-idle-bg:    #2C2210 !important;
+    --status-error:      #FF6154 !important;
+    --status-error-bg:   #331818 !important;
+    --status-info:       #4BA7EC !important;
+    --status-info-bg:    #142636 !important;
+
+    /* Elevation */
+    --shadow-card:       none !important;
+    --shadow-card-hover: none !important;
+    --shadow-navbar:     0 1px 0 var(--border) !important;
+
+    /* Shape */
+    --radius:            0px !important;
+    --radius-lg:         0px !important;
+    --radius-pill:       0px !important;
+}
+
+/* ================================================================ */
+/* 2. Streamlit Main App & Containers Background                    */
+/* ================================================================ */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stAppViewBlockContainer"],
+.main,
+.block-container,
+div[class*="block-container"] {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+html, body, [class*="css"], [data-testid="stMarkdownContainer"], p, span, div, label {
+    color: var(--text-primary);
+}
+
+/* ================================================================ */
+/* 3. Brand Bar (.gpp-navbar)                                       */
+/* ================================================================ */
+.gpp-navbar {
+    background: var(--bg-navbar) !important;
+    border-bottom: 1px solid var(--border) !important;
+    box-shadow: var(--shadow-navbar) !important;
+}
+
+.gpp-navbar-logo {
+    background: var(--accent-teal) !important;
+    color: #FFFFFF !important;
+}
+
+.gpp-navbar-brand-name {
+    color: #FFFFFF !important;
+}
+
+/* ================================================================ */
+/* 4. Navigation Tab Strip & Buttons                                */
+/* ================================================================ */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker),
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker),
+div[class*="horizontal-block"]:has(#gpp-nav-marker) {
+    background: var(--bg-surface) !important;
+    border-bottom: 1px solid var(--border) !important;
+    box-shadow: none !important;
+    width: calc(100% + 4rem) !important;
+    max-width: calc(100% + 4rem) !important;
+    box-sizing: border-box !important;
+}
+
+/* Inactive nav tab buttons */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button {
+    background: var(--bg-surface) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button:hover {
+    background: var(--bg-muted) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Active tab */
+.gpp-navtab-active {
+    background: var(--accent-teal) !important;
+    color: #FFFFFF !important;
+    box-shadow: inset 0 -3px 0 #FFFFFF !important;
+}
+
+/* Theme toggle button (second to last column) */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button {
+    background: var(--bg-surface) !important;
+    color: var(--accent-gold) !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button:hover {
+    background: var(--bg-muted) !important;
+    color: #FFFFFF !important;
+}
+
+/* Logout button (last column) */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button {
+    background: var(--bg-surface) !important;
+    color: var(--status-error) !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button:hover {
+    background: var(--status-error-bg) !important;
+    color: #FF8A80 !important;
+}
+
+/* ================================================================ */
+/* 5. Base Buttons & Primary Buttons                                */
+/* ================================================================ */
+.stButton > button,
+[data-testid="stFormSubmitButton"] > button {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-strong) !important;
+    color: var(--text-primary) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+.stButton > button:hover,
+[data-testid="stFormSubmitButton"] > button:hover {
+    border-color: var(--accent-teal) !important;
+    color: var(--accent-teal) !important;
+    background: var(--bg-muted) !important;
+}
+
+/* Primary buttons */
+.stButton > button[kind="primary"],
+.stButton > button[data-testid*="primary"],
+[data-testid="stFormSubmitButton"] > button[kind="primary"],
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"],
+button[kind="primary"],
+button[data-testid*="primary"] {
+    background: var(--accent-teal) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.stButton > button[kind="primary"]:hover,
+.stButton > button[data-testid*="primary"]:hover,
+[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"]:hover,
+button[kind="primary"]:hover,
+button[data-testid*="primary"]:hover {
+    background: var(--accent-teal-hover) !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* ================================================================ */
+/* 6. Form Inputs, Selects, Sliders, File Uploader                  */
+/* ================================================================ */
+/* All Text Inputs, Number Inputs, Password Inputs, and Form Inputs — every DOM layer */
+[data-testid="stTextInput"],
+[data-testid="stTextInput"] > div,
+[data-testid="stTextInput"] div[data-baseweb="input"],
+[data-testid="stTextInput"] div[data-baseweb="base-input"],
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"],
+[data-testid="stNumberInput"] > div,
+[data-testid="stNumberInput"] div[data-baseweb="input"],
+[data-testid="stNumberInput"] div[data-baseweb="base-input"],
+[data-testid="stNumberInput"] input,
+[data-testid="stTextArea"] div[data-baseweb="textarea"],
+[data-testid="stTextArea"] textarea {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    border: 1px solid #263544 !important;
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stTextInput"] input:focus,
+[data-testid="stNumberInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus,
+[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within,
+[data-testid="stNumberInput"] div[data-baseweb="input"]:focus-within {
+    border-color: #2490D0 !important;
+    box-shadow: none !important;
+}
+
+/* Placeholders specifically — high contrast readable grey-blue */
+[data-testid="stTextInput"] input::placeholder,
+[data-testid="stNumberInput"] input::placeholder,
+[data-testid="stTextArea"] textarea::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #8899AA !important;
+    -webkit-text-fill-color: #8899AA !important;
+    opacity: 1 !important;
+}
+
+/* Selectbox & MultiSelect container AND every inner text span/div inside */
+[data-testid="stSelectbox"],
+[data-testid="stSelectbox"] *,
+[data-testid="stMultiSelect"],
+[data-testid="stMultiSelect"] *,
+div[data-baseweb="select"],
+div[data-baseweb="select"] *,
+div[role="combobox"],
+div[role="combobox"] * {
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+}
+
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stMultiSelect"] > div > div,
+div[data-baseweb="select"] > div {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    border: 1px solid #263544 !important;
+    border-radius: 0px !important;
+}
+
+/* Dropdown popover menu when opened — Maximum ID & Chained Specificity for every Baseweb layer */
+html body div[data-baseweb="layer"],
+html body div[data-baseweb="layer"] > div,
+html body div[data-baseweb="layer"] > div > div,
+html body div[data-baseweb="popover"],
+html body div[data-baseweb="popover"] > div,
+html body div[data-baseweb="popover"] > div > div,
+html body div[data-baseweb="popover"] *,
+html body div[data-baseweb="menu"],
+html body div[data-baseweb="menu"] > div,
+html body div[data-baseweb="menu"] *,
+html body ul[role="listbox"],
+html body ul[role="listbox"] > li,
+html body ul[role="listbox"] *,
+html body ul[data-baseweb="menu"],
+html body ul[data-baseweb="menu"] *,
+html body li[role="option"],
+html body li[role="option"] *,
+html body [data-testid="stVirtualDropdown"],
+html body [data-testid="stVirtualDropdown"] *,
+html body div[id^="bui-"],
+html body div[id^="bui-"] *,
+#bui-1-popover, #bui-2-popover, #bui-3-popover, #bui-4-popover, #bui-5-popover,
+#bui-6-popover, #bui-7-popover, #bui-8-popover, #bui-9-popover, #bui-10-popover,
+#bui-11-popover, #bui-12-popover, #bui-13-popover, #bui-14-popover, #bui-15-popover,
+#bui-16-popover, #bui-17-popover, #bui-18-popover, #bui-19-popover, #bui-20-popover,
+#bui-1-popover > div, #bui-2-popover > div, #bui-3-popover > div, #bui-4-popover > div, #bui-5-popover > div,
+#bui-6-popover > div, #bui-7-popover > div, #bui-8-popover > div, #bui-9-popover > div, #bui-10-popover > div,
+#bui-1-listbox, #bui-2-listbox, #bui-3-listbox, #bui-4-listbox, #bui-5-listbox,
+#bui-6-listbox, #bui-7-listbox, #bui-8-listbox, #bui-9-listbox, #bui-10-listbox,
+#bui-11-listbox, #bui-12-listbox, #bui-13-listbox, #bui-14-listbox, #bui-15-listbox,
+#bui-16-listbox, #bui-17-listbox, #bui-18-listbox, #bui-19-listbox, #bui-20-listbox,
+div[class*="VirtualDropdown"],
+div[class*="VirtualDropdown"] *,
+div[class*="Option"],
+div[class*="Option"] *,
+div[class*="Popover"],
+div[class*="Popover"] *,
+div[class*="PopoverBody"],
+div[class*="PopoverBody"] * {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+    border-color: #263544 !important;
+    border-radius: 0px !important;
+}
+
+li[role="option"]:hover,
+li[role="option"]:hover *,
+li[role="option"][aria-selected="true"],
+li[role="option"][aria-selected="true"] *,
+li[role="option"].aria-selected,
+li[role="option"]:focus,
+li[role="option"]:active,
+[data-testid="stVirtualDropdown"] div:hover,
+[data-testid="stVirtualDropdown"] div:hover *,
+div[id^="bui-"] li:hover,
+div[id^="bui-"] li:hover *,
+div[id^="bui-"] [role="option"]:hover,
+div[id^="bui-"] [role="option"]:hover *,
+div[id^="bui-"] [aria-selected="true"],
+div[id^="bui-"] [aria-selected="true"] * {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* File uploader container, dropzone, and uploaded file item card */
+[data-testid="stFileUploader"],
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploaderDropzone"] > div,
+[data-testid="stFileUploaderFile"],
+[data-testid="stFileUploaderFile"] *,
+[data-testid="stUploadedFile"],
+[data-testid="stUploadedFile"] * {
+    background-color: var(--bg-inset) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-color: var(--border-strong) !important;
+    border-radius: 0px !important;
+}
+
+[data-testid="stFileUploader"] > div:first-child {
+    border: 1.5px dashed var(--border-strong) !important;
+}
+
+/* File uploader upload button specifically */
+[data-testid="stFileUploader"] button,
+[data-testid="stFileUploaderDropzone"] button,
+[data-testid="stFileUploader"] [data-testid="baseButton-secondary"] {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid #2490D0 !important;
+    border-radius: 0px !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stFileUploader"] button:hover,
+[data-testid="stFileUploaderDropzone"] button:hover {
+    background: #2490D0 !important;
+    background-color: #2490D0 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-color: #38A8E8 !important;
+}
+
+/* Date Input & Time Input boxes */
+[data-testid="stDateInput"] > div > div,
+[data-testid="stDateInput"] input,
+[data-testid="stTimeInput"] > div > div,
+[data-testid="stTimeInput"] input {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    border: 1px solid var(--border-strong) !important;
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+    border-radius: 0px !important;
+}
+
+/* Baseweb Calendar popup container AND every inner day cell / button / header */
+div[data-baseweb="calendar"],
+div[data-baseweb="calendar"] *,
+div[role="application"][aria-label*="calendar"],
+div[role="application"][aria-label*="calendar"] *,
+div[role="gridcell"],
+div[role="gridcell"] *,
+div[role="gridcell"] > button,
+div[role="gridcell"] > div {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+    border-color: #263544 !important;
+}
+
+/* Calendar month/year navigation bar and weekday headers (Su, Mo, Tu...) */
+div[data-baseweb="calendar"] header,
+div[data-baseweb="calendar"] header *,
+div[data-baseweb="calendar"] [role="presentation"],
+div[data-baseweb="calendar"] [role="presentation"] * {
+    background: #0A1117 !important;
+    background-color: #0A1117 !important;
+    color: #A0B0C0 !important;
+    -webkit-text-fill-color: #A0B0C0 !important;
+}
+
+/* Calendar outside month days (greyed out) */
+div[data-baseweb="calendar"] [aria-disabled="true"],
+div[data-baseweb="calendar"] [aria-disabled="true"] *,
+div[role="gridcell"][aria-disabled="true"] *,
+div[role="gridcell"] button[disabled] {
+    background: #0F171E !important;
+    background-color: #0F171E !important;
+    color: #4A5D70 !important;
+    -webkit-text-fill-color: #4A5D70 !important;
+    opacity: 0.6 !important;
+}
+
+/* Calendar selected day / hovered day / today */
+div[data-baseweb="calendar"] button:hover,
+div[data-baseweb="calendar"] button:focus,
+div[data-baseweb="calendar"] [aria-selected="true"],
+div[data-baseweb="calendar"] [aria-selected="true"] *,
+div[role="gridcell"] button[aria-selected="true"],
+div[role="gridcell"] button[aria-selected="true"] * {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-radius: 0px !important;
+}
+
+/* ================================================================ */
+/* 7. Cards, Topbars, KPI Cards                                     */
+/* ================================================================ */
+.gpp-card,
+.gpp-card-glow {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+.gpp-card:hover,
+.gpp-card-glow:hover {
+    box-shadow: var(--shadow-card-hover) !important;
+}
+
+.gpp-topbar {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+.gpp-topbar-clock {
+    background: var(--bg-inset) !important;
+    border-color: var(--border) !important;
+    color: var(--text-secondary) !important;
+}
+
+.gpp-kpi-value {
+    color: var(--text-primary) !important;
+}
+
+/* ================================================================ */
+/* 8. Status Badges                                                 */
+/* ================================================================ */
+.gpp-status-running { background: var(--status-running-bg) !important; color: var(--status-running) !important; }
+.gpp-status-idle    { background: var(--status-idle-bg) !important;    color: var(--status-idle) !important; }
+.gpp-status-error   { background: var(--status-error-bg) !important;   color: var(--status-error) !important; }
+.gpp-status-info    { background: var(--status-info-bg) !important;    color: var(--status-info) !important; }
+
+/* ================================================================ */
+/* 9. Stage Progress Bar                                            */
+/* ================================================================ */
+.gpp-stage-pill--done    { background: var(--status-running-bg) !important; color: var(--status-running) !important; }
+.gpp-stage-pill--active  { background: var(--accent-teal) !important; color: #FFFFFF !important; }
+.gpp-stage-pill--pending { background: var(--bg-inset) !important; color: var(--text-muted) !important; border-color: var(--border) !important; }
+
+/* ================================================================ */
+/* 10. Tables, Dividers, Section Labels                             */
+/* ================================================================ */
+.gpp-table th {
+    background: var(--bg-inset) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border) !important;
+}
+
+.gpp-table td {
+    color: var(--text-primary) !important;
+    border-color: var(--border) !important;
+}
+
+.gpp-table tr:hover td {
+    background: var(--bg-muted) !important;
+}
+
+.gpp-divider {
+    border-top-color: var(--border) !important;
+}
+
+.gpp-section-label {
+    color: var(--text-secondary) !important;
+    border-left: none !important;
+}
+
+.gpp-section-label::before {
+    background: var(--accent-gold) !important;
+}
+
+/* ================================================================ */
+/* 11. Login Page                                                   */
+/* ================================================================ */
+.block-container:not(:has(#gpp-nav-marker)) {
+    padding-top: 1.6rem !important;
+    padding-bottom: 2rem !important;
+}
+
+.gpp-login-card,
+[data-testid="stForm"] {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    border-radius: 0px !important;
+    padding: 24px 24px !important;
+    box-shadow: none !important;
+}
+
+/* Ensure login inputs & form inputs have crisp dark backgrounds and bright text */
+[data-testid="stForm"] [data-testid="stTextInput"],
+[data-testid="stForm"] [data-testid="stTextInput"] > div,
+[data-testid="stForm"] [data-testid="stTextInput"] div[data-baseweb="input"],
+[data-testid="stForm"] [data-testid="stTextInput"] div[data-baseweb="base-input"],
+[data-testid="stForm"] [data-testid="stTextInput"] input {
+    background: #131C24 !important;
+    background-color: #131C24 !important;
+    border: 1px solid #263544 !important;
+    color: #F0F4F8 !important;
+    -webkit-text-fill-color: #F0F4F8 !important;
+    border-radius: 0px !important;
+}
+
+[data-testid="stForm"] [data-testid="stTextInput"] input::placeholder {
+    color: #8899AA !important;
+    -webkit-text-fill-color: #8899AA !important;
+}
+
+img.gpp-navbar-logo,
+img.gpp-login-logo-ring,
+.gpp-navbar-logo,
+.gpp-login-logo-ring {
+    background: #FFFFFF !important;
+    border-color: var(--border) !important;
+}

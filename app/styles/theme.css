@@ -1,0 +1,998 @@
+/*
+ * GPP Visual Inspection & Smart Manufacturing Analytics
+ * Design system — Light Warm Corporate (inspired by gpp-india.com)
+ *
+ * Single source of visual truth. All tokens defined here; components
+ * reference CSS variables, never hardcode values inline.
+ *
+ * IMPORTANT: Streamlit's base theme is set to "light" in
+ * .streamlit/config.toml — this CSS builds on top of that.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ================================================================ */
+/* Design tokens                                                     */
+/* ================================================================ */
+:root {
+    /* Backgrounds */
+    --bg-primary:   #F7F3EE;
+    --bg-surface:   #FFFFFF;
+    --bg-muted:     #EDE8E1;
+    --bg-inset:     #F0EBE4;
+    --bg-navbar:    #003D5C;
+    --bg-navbar-hover: #004F78;
+
+    /* Borders */
+    --border:        #D9D1C5;
+    --border-strong: #C4B8A8;
+    --border-accent: #C9932A;
+
+    /* Text */
+    --text-primary:   #1A1208;
+    --text-secondary: #5A4F3E;
+    --text-muted:     #9A8D7A;
+
+    /* Accents */
+    --accent-teal:       #005B8E;
+    --accent-teal-hover: #004A74;
+    --accent-gold:       #C9932A;
+    --accent-gold-hover: #B5811F;
+    --accent-gold-light: #FDF3E0;
+
+    /* Status */
+    --status-running:    #1E7E45;
+    --status-running-bg: #E6F5EC;
+    --status-idle:       #B87B10;
+    --status-idle-bg:    #FEF5E0;
+    --status-error:      #C0392B;
+    --status-error-bg:   #FDECEA;
+    --status-info:       #1A6FA0;
+    --status-info-bg:    #E3F2FD;
+
+    /* Typography */
+    --font-body:    'Inter', sans-serif;
+    --font-heading: 'Poppins', sans-serif;
+    --font-mono:    'JetBrains Mono', monospace;
+
+    /* Elevation */
+    --shadow-card:       none !important;
+    --shadow-card-hover: none !important;
+    --shadow-navbar:     0 1px 0 var(--border) !important;
+
+    /* Shape — sharp industrial corners matching status bar */
+    --radius:      0px !important;
+    --radius-lg:   0px !important;
+    --radius-pill: 0px !important;
+    --transition-fast: 150ms ease-out;
+    --transition-base: 220ms ease-out;
+}
+
+/* ================================================================ */
+/* Streamlit chrome resets                                           */
+/* ================================================================ */
+
+/* Main app background */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stAppViewBlockContainer"],
+.main,
+.block-container,
+div[class*="block-container"] {
+    background-color: var(--bg-primary) !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Hide Streamlit's default header bar */
+[data-testid="stHeader"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+}
+
+/* Completely hide sidebar */
+[data-testid="stSidebar"],
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+
+/* Content area padding */
+[data-testid="stMain"] .block-container,
+[data-testid="stMainBlockContainer"],
+[data-testid="stAppViewBlockContainer"],
+div[class*="block-container"] {
+    padding-top: 0 !important;
+    padding-bottom: 2rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-top: -1.2rem !important;
+    box-sizing: border-box !important;
+}
+
+/* Base typography */
+html, body, [class*="css"] {
+    font-family: var(--font-body) !important;
+    color: var(--text-primary) !important;
+}
+
+h1, h2, h3, h4,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 {
+    font-family: var(--font-heading) !important;
+    font-weight: 600;
+    color: var(--text-primary) !important;
+}
+
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+    color: var(--text-secondary);
+}
+
+/* ================================================================ */
+/* Global widget overrides (light theme polish)                     */
+/* ================================================================ */
+
+/* All buttons — outer button widget */
+.stButton > button,
+[data-testid="stFormSubmitButton"] > button {
+    font-family: var(--font-body) !important;
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border-strong) !important;
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    transition: all var(--transition-fast) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+/* Inner text wrapper inside buttons — NO border, NO background, NO shadow! */
+.stButton > button *,
+[data-testid="stFormSubmitButton"] > button * {
+    font-family: var(--font-body) !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.stButton > button:hover,
+[data-testid="stFormSubmitButton"] > button:hover {
+    border-color: var(--accent-teal) !important;
+    color: var(--accent-teal) !important;
+    background: var(--bg-surface) !important;
+    box-shadow: var(--shadow-card-hover) !important;
+}
+
+.stButton > button:hover *,
+[data-testid="stFormSubmitButton"] > button:hover * {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* PRIMARY BUTTONS (actual button element only!) */
+.stButton > button[kind="primary"],
+.stButton > button[data-testid*="primary"],
+[data-testid="stFormSubmitButton"] > button[kind="primary"],
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"],
+button[kind="primary"],
+button[data-testid*="primary"] {
+    background: var(--accent-teal) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px !important;
+    border-radius: var(--radius) !important;
+    padding: 10px 24px !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+/* Inner text wrapper inside primary buttons - NO background, NO border! */
+.stButton > button[kind="primary"] *,
+.stButton > button[data-testid*="primary"] *,
+[data-testid="stFormSubmitButton"] > button[kind="primary"] *,
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"] *,
+button[kind="primary"] *,
+button[data-testid*="primary"] * {
+    background: transparent !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+}
+
+.stButton > button[kind="primary"]:hover,
+.stButton > button[data-testid*="primary"]:hover,
+[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"]:hover,
+button[kind="primary"]:hover,
+button[data-testid*="primary"]:hover {
+    background: var(--accent-teal-hover) !important;
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+    box-shadow: var(--shadow-card-hover) !important;
+}
+
+.stButton > button[kind="primary"]:hover *,
+.stButton > button[data-testid*="primary"]:hover *,
+[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover *,
+[data-testid="stFormSubmitButton"] > button[data-testid*="primary"]:hover *,
+button[kind="primary"]:hover *,
+button[data-testid*="primary"]:hover * {
+    background: transparent !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* All Text Inputs, Number Inputs, Password Inputs, and Form Inputs — every DOM layer */
+[data-testid="stTextInput"],
+[data-testid="stTextInput"] > div,
+[data-testid="stTextInput"] div[data-baseweb="input"],
+[data-testid="stTextInput"] div[data-baseweb="base-input"],
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"],
+[data-testid="stNumberInput"] > div,
+[data-testid="stNumberInput"] div[data-baseweb="input"],
+[data-testid="stNumberInput"] div[data-baseweb="base-input"],
+[data-testid="stNumberInput"] input,
+[data-testid="stTextArea"] div[data-baseweb="textarea"],
+[data-testid="stTextArea"] textarea {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--border-strong) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-radius: 0px !important;
+}
+
+[data-testid="stTextInput"] input:focus,
+[data-testid="stNumberInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus,
+[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within,
+[data-testid="stNumberInput"] div[data-baseweb="input"]:focus-within {
+    border-color: var(--accent-teal) !important;
+    box-shadow: 0 0 0 2px rgba(0,91,142,0.12) !important;
+}
+
+/* Placeholders */
+[data-testid="stTextInput"] input::placeholder,
+[data-testid="stNumberInput"] input::placeholder,
+[data-testid="stTextArea"] textarea::placeholder,
+input::placeholder,
+textarea::placeholder {
+    color: #6B7C93 !important;
+    -webkit-text-fill-color: #6B7C93 !important;
+    opacity: 1 !important;
+}
+
+/* Select / dropdown & MultiSelect inner text and containers */
+[data-testid="stSelectbox"],
+[data-testid="stSelectbox"] *,
+[data-testid="stMultiSelect"],
+[data-testid="stMultiSelect"] *,
+div[data-baseweb="select"],
+div[data-baseweb="select"] *,
+div[role="combobox"],
+div[role="combobox"] * {
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stMultiSelect"] > div > div,
+div[data-baseweb="select"] > div {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-strong) !important;
+    border-radius: var(--radius) !important;
+}
+
+/* Dropdown popover menu when opened */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] *,
+div[data-baseweb="menu"],
+div[data-baseweb="menu"] *,
+ul[role="listbox"],
+ul[role="listbox"] *,
+ul[data-baseweb="menu"],
+ul[data-baseweb="menu"] *,
+li[role="option"],
+li[role="option"] *,
+[data-testid="stVirtualDropdown"],
+[data-testid="stVirtualDropdown"] *,
+div[id^="bui-"],
+div[id^="bui-"] *,
+div[class*="VirtualDropdown"],
+div[class*="VirtualDropdown"] *,
+div[class*="Option"],
+div[class*="Option"] *,
+div[class*="Popover"],
+div[class*="Popover"] * {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-radius: 0px !important;
+}
+
+li[role="option"]:hover,
+li[role="option"]:hover *,
+li[role="option"][aria-selected="true"],
+li[role="option"][aria-selected="true"] *,
+li[role="option"].aria-selected,
+li[role="option"]:focus,
+li[role="option"]:active {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"],
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploaderDropzone"] > div,
+[data-testid="stFileUploaderFile"],
+[data-testid="stFileUploaderFile"] *,
+[data-testid="stUploadedFile"],
+[data-testid="stUploadedFile"] * {
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-radius: var(--radius) !important;
+}
+
+[data-testid="stFileUploader"] > div:first-child {
+    border: 1.5px dashed var(--border-strong) !important;
+}
+
+/* File uploader upload button specifically */
+[data-testid="stFileUploader"] button,
+[data-testid="stFileUploaderDropzone"] button,
+[data-testid="stFileUploader"] [data-testid="baseButton-secondary"] {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid #2490D0 !important;
+    border-radius: 0px !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stFileUploader"] button:hover,
+[data-testid="stFileUploaderDropzone"] button:hover {
+    background: #2490D0 !important;
+    background-color: #2490D0 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-color: #38A8E8 !important;
+}
+
+/* Date Input & Time Input boxes */
+[data-testid="stDateInput"] > div > div,
+[data-testid="stDateInput"] input,
+[data-testid="stTimeInput"] > div > div,
+[data-testid="stTimeInput"] input {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--border-strong) !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-radius: 0px !important;
+}
+
+/* Baseweb Calendar popup container AND every inner day cell / button / header */
+div[data-baseweb="calendar"],
+div[data-baseweb="calendar"] *,
+div[role="application"][aria-label*="calendar"],
+div[role="application"][aria-label*="calendar"] *,
+div[role="gridcell"],
+div[role="gridcell"] *,
+div[role="gridcell"] > button,
+div[role="gridcell"] > div {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    border-color: var(--border) !important;
+}
+
+/* Calendar month/year navigation bar and weekday headers */
+div[data-baseweb="calendar"] header,
+div[data-baseweb="calendar"] header *,
+div[data-baseweb="calendar"] [role="presentation"],
+div[data-baseweb="calendar"] [role="presentation"] * {
+    background: #F4F6F9 !important;
+    background-color: #F4F6F9 !important;
+    color: var(--text-secondary) !important;
+    -webkit-text-fill-color: var(--text-secondary) !important;
+}
+
+/* Calendar outside month days (greyed out) */
+div[data-baseweb="calendar"] [aria-disabled="true"],
+div[data-baseweb="calendar"] [aria-disabled="true"] *,
+div[role="gridcell"][aria-disabled="true"] *,
+div[role="gridcell"] button[disabled] {
+    background: #F9FAFB !important;
+    background-color: #F9FAFB !important;
+    color: #9AA5B1 !important;
+    -webkit-text-fill-color: #9AA5B1 !important;
+    opacity: 0.6 !important;
+}
+
+/* Calendar selected day / hovered day / today */
+div[data-baseweb="calendar"] button:hover,
+div[data-baseweb="calendar"] button:focus,
+div[data-baseweb="calendar"] [aria-selected="true"],
+div[data-baseweb="calendar"] [aria-selected="true"] *,
+div[role="gridcell"] button[aria-selected="true"],
+div[role="gridcell"] button[aria-selected="true"] * {
+    background: #1D549B !important;
+    background-color: #1D549B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border-radius: 0px !important;
+}
+
+/* Alerts */
+[data-testid="stAlert"] {
+    border-radius: var(--radius) !important;
+    font-size: 13.5px !important;
+}
+
+/* ================================================================ */
+/* Brand bar (Row 1 of nav shell — pure HTML)                       */
+/* ================================================================ */
+
+.gpp-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-navbar);
+    box-shadow: var(--shadow-navbar);
+    padding: 0 28px;
+    height: 60px;
+    /* full bleed */
+    margin-left:  -2rem !important;
+    margin-right: -2rem !important;
+    margin-bottom: 0 !important;
+    width: calc(100% + 4rem) !important;
+    max-width: calc(100% + 4rem) !important;
+    box-sizing: border-box !important;
+}
+
+.gpp-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+img.gpp-navbar-logo,
+.gpp-navbar-logo {
+    height: 44px !important;
+    width: auto !important;
+    max-width: 150px !important;
+    background: #FFFFFF !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+    border: 1px solid var(--border) !important;
+}
+
+.gpp-navbar-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.gpp-navbar-brand-name {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+}
+
+.gpp-navbar-brand-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.gpp-navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.gpp-navbar-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+}
+
+.gpp-navbar-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.gpp-navbar-user-role {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    text-transform: capitalize;
+}
+
+.gpp-navbar-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+    flex-shrink: 0;
+}
+
+/* ================================================================ */
+/* Tab strip (Row 2 — real st.button elements)                       */
+/*                                                                   */
+/* We target the stHorizontalBlock immediately after the element     */
+/* containing #gpp-nav-marker using the CSS adjacent sibling (+)     */
+/* combinator combined with :has() (Chrome 105+, Edge 105+).         */
+/* ================================================================ */
+
+/* ── Tab strip container ── */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker),
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker),
+div[class*="horizontal-block"]:has(#gpp-nav-marker) {
+    background: #EBF1F5 !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 0 !important;
+    margin-left:  -2rem !important;
+    margin-right: -2rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+    width: calc(100% + 4rem) !important;
+    max-width: calc(100% + 4rem) !important;
+    box-sizing: border-box !important;
+    align-items: stretch !important;
+    flex-wrap: nowrap !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06) !important;
+    gap: 0 !important;
+}
+
+/* Columns in strip — zero padding, equal flex */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) > div[data-testid="column"],
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) > div[data-testid="column"] {
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Inactive nav tab buttons — flat block style matching Image 2 */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button {
+    background: #EBF1F5 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #003D5C !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    padding: 0 8px !important;
+    box-shadow: none !important;
+    transition: all 150ms ease !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.15px !important;
+    width: 100% !important;
+    height: 48px !important;
+    line-height: 48px !important;
+}
+
+/* Inner text of nav buttons — NO border, NO background, NO shadow! */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button *,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button * {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    padding: 0 !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stButton > button:hover {
+    background: #D8E4EC !important;
+    color: #00283C !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Theme toggle button — second to last column of strip */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button {
+    color: #003D5C !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #EBF1F5 !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    padding: 0 8px !important;
+    height: 48px !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:nth-last-child(2) .stButton > button:hover {
+    background: #D8E4EC !important;
+    color: #00283C !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Logout button — right end of strip */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button {
+    color: #C0392B !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #EBF1F5 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 0 12px !important;
+    height: 48px !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button:hover,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) div[data-testid="column"]:last-child .stButton > button:hover {
+    background: #FDECEA !important;
+    color: #9B2335 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Suppress extra margin on markdown inside tab strip */
+[data-testid="stHorizontalBlock"]:has(#gpp-nav-marker) .stMarkdownContainer,
+div[class*="stHorizontalBlock"]:has(#gpp-nav-marker) .stMarkdownContainer {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Active tab — flat dark blue box matching Image 2 */
+.gpp-navtab-active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #003D5C !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    letter-spacing: 0.15px;
+    height: 48px;
+    line-height: 48px;
+    box-sizing: border-box;
+}
+
+/* ================================================================ */
+/* Page sub-header / top bar                                        */
+/* ================================================================ */
+
+.gpp-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+}
+
+.gpp-topbar-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.gpp-topbar-meta {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin-left: 10px;
+}
+
+.gpp-topbar-clock {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--bg-inset);
+    padding: 3px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+/* ================================================================ */
+/* Cards                                                             */
+/* ================================================================ */
+
+.gpp-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-base);
+}
+
+.gpp-card:hover {
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* Card with gold left-accent (active/processing state) */
+.gpp-card-glow {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-gold);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow var(--transition-base);
+}
+
+.gpp-card-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,147,42,0.04), transparent 60%);
+    pointer-events: none;
+}
+
+.gpp-card-glow:hover {
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* ================================================================ */
+/* KPI cards                                                         */
+/* ================================================================ */
+
+.gpp-kpi-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 8px;
+}
+
+.gpp-kpi-value {
+    font-family: var(--font-heading);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.gpp-kpi-value--accent  { color: var(--accent-teal); }
+.gpp-kpi-value--warning { color: var(--status-idle); }
+.gpp-kpi-value--danger  { color: var(--status-error); }
+
+.gpp-kpi-delta { font-size: 11.5px; margin-top: 4px; font-weight: 500; }
+.gpp-kpi-delta--up   { color: var(--status-running); }
+.gpp-kpi-delta--down { color: var(--status-error); }
+
+.gpp-kpi-accent-bar {
+    height: 3px;
+    width: 32px;
+    background: var(--accent-gold);
+    border-radius: 2px;
+    margin-top: 10px;
+}
+
+/* ================================================================ */
+/* Status badges                                                     */
+/* ================================================================ */
+
+.gpp-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: var(--radius-pill);
+    padding: 4px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font-body);
+}
+
+.gpp-status-badge .gpp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.gpp-status-running { background: var(--status-running-bg); color: var(--status-running); }
+.gpp-status-running .gpp-dot { background: var(--status-running); }
+
+.gpp-status-idle { background: var(--status-idle-bg); color: var(--status-idle); }
+.gpp-status-idle .gpp-dot { background: var(--status-idle); }
+
+.gpp-status-error { background: var(--status-error-bg); color: var(--status-error); }
+.gpp-status-error .gpp-dot { background: var(--status-error); }
+
+.gpp-status-info { background: var(--status-info-bg); color: var(--status-info); }
+.gpp-status-info .gpp-dot { background: var(--status-info); }
+
+/* ================================================================ */
+/* Stage progress bar                                               */
+/* ================================================================ */
+
+.gpp-stage-track {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.gpp-stage-pill {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    white-space: nowrap;
+}
+
+.gpp-stage-pill--done    { background: var(--status-running-bg); color: var(--status-running); }
+.gpp-stage-pill--active  { background: var(--accent-teal); color: #FFFFFF; font-weight: 600; }
+.gpp-stage-pill--pending { background: var(--bg-inset); color: var(--text-muted); border: 1px solid var(--border); }
+
+.gpp-stage-connector       { flex: 1; height: 2px; background: var(--border); min-width: 8px; }
+.gpp-stage-connector--done { background: var(--status-running); }
+.gpp-stage-connector--active { background: var(--accent-teal); }
+
+/* ================================================================ */
+/* Section labels, dividers, tables                                 */
+/* ================================================================ */
+
+.gpp-section-label {
+    color: var(--text-secondary) !important;
+    font-size: 11.5px !important;
+    font-family: var(--font-heading) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    margin: 24px 0 12px -14px !important;
+    padding: 0 !important;
+    border-left: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.gpp-section-label::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 4px !important;
+    height: 15px !important;
+    background: var(--accent-gold) !important;
+    border-radius: 2px !important;
+    flex-shrink: 0 !important;
+}
+
+.gpp-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 18px 0;
+}
+
+.gpp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.gpp-table th {
+    background: var(--bg-inset);
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+}
+
+.gpp-table td {
+    padding: 10px 14px;
+    color: var(--text-primary);
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.gpp-table tbody tr:first-child td { border-top: none; }
+.gpp-table tr:hover td { background: var(--bg-inset); }
+
+/* ================================================================ */
+/* Login page                                                       */
+/* ================================================================ */
+
+/* Tighten top block-container padding when on login screen (no topbar/marker) */
+.block-container:not(:has(#gpp-nav-marker)) {
+    padding-top: 1.6rem !important;
+    padding-bottom: 2rem !important;
+}
+
+.gpp-login-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 16px !important;
+}
+
+img.gpp-login-logo-ring,
+.gpp-login-logo-ring {
+    height: 86px !important;
+    width: auto !important;
+    max-width: 260px !important;
+    background: #FFFFFF !important;
+    padding: 8px 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 4px !important;
+    object-fit: contain !important;
+    margin-bottom: 14px !important;
+    box-shadow: none !important;
+}
+
+.gpp-login-title {
+    font-family: var(--font-heading);
+    font-size: 23px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+.gpp-login-subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.gpp-login-card,
+[data-testid="stForm"] {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 0px !important;
+    padding: 24px 24px !important;
+    box-shadow: none !important;
+}

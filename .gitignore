@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# Database (local SQLite - never commit this)
+database/gpp_inspection.db
+database/*.db
+
+# Local data / uploads / exports / logs
+data/uploads/
+data/raw/
+data/processed/
+logs/
+exports/
+scratch/
+artifacts/
+
+# ML models (too large for GitHub, keep locally)
+models/*.keras
+models/*.h5
+models/*.pkl
+models/checkpoints/
+
+# Training datasets (too large for GitHub — 200+ MB of images)
+data/screw_dataset/
+data/casting_dataset/
+
+# Streamlit secrets (NEVER commit)
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+
+# Jupyter
+.ipynb_checkpoints/
