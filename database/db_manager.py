@@ -65,16 +65,25 @@ def _make_dict_connection_pg():
     import urllib.parse
     parsed = urllib.parse.urlparse(DATABASE_URL)
     host = parsed.hostname or ""
-    port = parsed.port or 5432
+    base_port = parsed.port or 5432
     dbname = (parsed.path or "/postgres").lstrip("/") or "postgres"
     user = parsed.username or ""
     password = urllib.parse.unquote(parsed.password or "")
 
-    logger.info("Connecting to PostgreSQL: host=%s port=%s db=%s user=%s", host, port, dbname, user)
+    logger.info("Connecting to PG: host=%s base_port=%s db=%s user=%s", host, base_port, dbname, user)
 
-    # Try sslmode=prefer first (works with or without SSL enforcement),
-    # then fall back to disable if that fails too.
-    for sslmode in ("prefer", "disable", "require"):
+    # Try every combination of port + sslmode until one succeeds.
+    # Port 5432 = session pooler, 6543 = transaction pooler.
+    attempts = [
+        (base_port, "require"),
+        (base_port, "prefer"),
+        (base_port, "disable"),
+        (6543,      "require"),
+        (6543,      "prefer"),
+        (6543,      "disable"),
+    ]
+    errors = []
+    for port, sslmode in attempts:
         try:
             conn = psycopg2.connect(
                 host=host,
@@ -83,23 +92,25 @@ def _make_dict_connection_pg():
                 user=user,
                 password=password,
                 sslmode=sslmode,
-                connect_timeout=20,
+                connect_timeout=15,
                 cursor_factory=psycopg2.extras.RealDictCursor,
             )
             conn.autocommit = False
-            logger.info("PostgreSQL connection established (sslmode=%s).", sslmode)
+            logger.info("PG connected: port=%s sslmode=%s", port, sslmode)
             return conn
         except psycopg2.OperationalError as e:
-            err_msg = str(e).split("\n")[0]
-            logger.warning("Connection attempt sslmode=%s failed: %s", sslmode, err_msg)
-            last_err = e
+            msg = str(e).split("\n")[0]
+            logger.warning("Attempt port=%s sslmode=%s failed: %s", port, sslmode, msg)
+            errors.append(f"port={port} sslmode={sslmode}: {msg}")
 
+    # Show diagnostic on screen (not redacted since it's a RuntimeError, not psycopg2 error)
+    import streamlit as st
+    diag = "\n".join(errors)
+    st.error(f"**Database connection failed.** All attempts exhausted:\n\n```\n{diag}\n```")
     raise RuntimeError(
-        f"Cannot connect to Supabase after trying all SSL modes.\n"
-        f"Host: {host}  Port: {port}  DB: {dbname}  User: {user}\n"
-        f"Last error type: {type(last_err).__name__}\n"
-        f"Check DATABASE_URL secret in Streamlit Cloud settings."
-    ) from last_err
+        f"Cannot connect to Supabase. Host={host} User={user}\n{diag}"
+    )
+
 
 
 
