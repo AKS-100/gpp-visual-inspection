@@ -61,9 +61,15 @@ class _DictRow(dict):
 
 def _make_dict_connection_pg():
     """Open a psycopg2 connection whose cursors return _DictRow objects."""
-    conn = psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+    # Supabase requires SSL — ensure sslmode=require is in the URL
+    url = DATABASE_URL
+    if "sslmode" not in url:
+        sep = "&" if "?" in url else "?"
+        url = url + sep + "sslmode=require"
+    conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
     conn.autocommit = False
     return conn
+
 
 
 def get_connection():
