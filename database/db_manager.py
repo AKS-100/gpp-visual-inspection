@@ -72,30 +72,36 @@ def _make_dict_connection_pg():
 
     logger.info("Connecting to PostgreSQL: host=%s port=%s db=%s user=%s", host, port, dbname, user)
 
-    try:
-        conn = psycopg2.connect(
-            host=host,
-            port=port,
-            dbname=dbname,
-            user=user,
-            password=password,
-            sslmode="require",
-            connect_timeout=15,
-            cursor_factory=psycopg2.extras.RealDictCursor,
-        )
-        conn.autocommit = False
-        logger.info("PostgreSQL connection established successfully.")
-        return conn
-    except psycopg2.OperationalError as e:
-        # Log the error type without the full URL to avoid leaking credentials
-        err_msg = str(e).split("\n")[0]  # first line only, no stack
-        logger.error("psycopg2.OperationalError connecting to %s:%s — %s", host, port, err_msg)
-        raise RuntimeError(
-            f"Cannot connect to Supabase database.\n"
-            f"Host: {host}  Port: {port}  DB: {dbname}  User: {user}\n"
-            f"Error: {err_msg}\n"
-            f"Check that DATABASE_URL secret is set correctly in Streamlit Cloud."
-        ) from e
+    # Try sslmode=prefer first (works with or without SSL enforcement),
+    # then fall back to disable if that fails too.
+    for sslmode in ("prefer", "disable", "require"):
+        try:
+            conn = psycopg2.connect(
+                host=host,
+                port=port,
+                dbname=dbname,
+                user=user,
+                password=password,
+                sslmode=sslmode,
+                connect_timeout=20,
+                cursor_factory=psycopg2.extras.RealDictCursor,
+            )
+            conn.autocommit = False
+            logger.info("PostgreSQL connection established (sslmode=%s).", sslmode)
+            return conn
+        except psycopg2.OperationalError as e:
+            err_msg = str(e).split("\n")[0]
+            logger.warning("Connection attempt sslmode=%s failed: %s", sslmode, err_msg)
+            last_err = e
+
+    raise RuntimeError(
+        f"Cannot connect to Supabase after trying all SSL modes.\n"
+        f"Host: {host}  Port: {port}  DB: {dbname}  User: {user}\n"
+        f"Last error type: {type(last_err).__name__}\n"
+        f"Check DATABASE_URL secret in Streamlit Cloud settings."
+    ) from last_err
+
+
 
 
 
