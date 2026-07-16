@@ -13,6 +13,9 @@ from dataclasses import dataclass
 import logging
 import streamlit as st
 
+logger = logging.getLogger(__name__)
+
+
 from core.ml.inference_engine import AIInferenceEngine, DummyInferenceEngine
 from core.repositories.ai_model_repository import AiModelRepositoryInterface, SqliteAiModelRepository
 from core.repositories.batch_repository import BatchRepositoryInterface, SqliteBatchRepository
