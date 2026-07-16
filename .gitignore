@@ -28,10 +28,11 @@ exports/
 scratch/
 artifacts/
 
-# ML models (too large for GitHub, keep locally)
-models/*.keras
-models/*.h5
+# ML models — trained weights included so Streamlit Cloud can run real inference
+# models/*.keras
+# models/*.h5
 models/*.pkl
+
 models/checkpoints/
 
 # Training datasets (too large for GitHub — 200+ MB of images)
