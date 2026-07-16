@@ -61,26 +61,42 @@ class _DictRow(dict):
 
 
 def _make_dict_connection_pg():
-    """Open a psycopg2 connection whose cursors return _DictRow objects.
-
-    Parses DATABASE_URL with urllib.parse so that URL-encoded characters in
-    the password (e.g. %40 for @) are decoded correctly before psycopg2
-    receives them as plain text keyword arguments.
-    """
+    """Open a psycopg2 connection whose cursors return _DictRow objects."""
     import urllib.parse
     parsed = urllib.parse.urlparse(DATABASE_URL)
-    conn = psycopg2.connect(
-        host=parsed.hostname,
-        port=parsed.port or 5432,
-        dbname=(parsed.path or "/postgres").lstrip("/") or "postgres",
-        user=parsed.username,
-        password=urllib.parse.unquote(parsed.password or ""),
-        sslmode="require",
-        connect_timeout=15,
-        cursor_factory=psycopg2.extras.RealDictCursor,
-    )
-    conn.autocommit = False
-    return conn
+    host = parsed.hostname or ""
+    port = parsed.port or 5432
+    dbname = (parsed.path or "/postgres").lstrip("/") or "postgres"
+    user = parsed.username or ""
+    password = urllib.parse.unquote(parsed.password or "")
+
+    logger.info("Connecting to PostgreSQL: host=%s port=%s db=%s user=%s", host, port, dbname, user)
+
+    try:
+        conn = psycopg2.connect(
+            host=host,
+            port=port,
+            dbname=dbname,
+            user=user,
+            password=password,
+            sslmode="require",
+            connect_timeout=15,
+            cursor_factory=psycopg2.extras.RealDictCursor,
+        )
+        conn.autocommit = False
+        logger.info("PostgreSQL connection established successfully.")
+        return conn
+    except psycopg2.OperationalError as e:
+        # Log the error type without the full URL to avoid leaking credentials
+        err_msg = str(e).split("\n")[0]  # first line only, no stack
+        logger.error("psycopg2.OperationalError connecting to %s:%s — %s", host, port, err_msg)
+        raise RuntimeError(
+            f"Cannot connect to Supabase database.\n"
+            f"Host: {host}  Port: {port}  DB: {dbname}  User: {user}\n"
+            f"Error: {err_msg}\n"
+            f"Check that DATABASE_URL secret is set correctly in Streamlit Cloud."
+        ) from e
+
 
 
 def get_connection():
