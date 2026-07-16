@@ -59,17 +59,28 @@ class _DictRow(dict):
             raise AttributeError(name)
 
 
+
 def _make_dict_connection_pg():
-    """Open a psycopg2 connection whose cursors return _DictRow objects."""
-    # Supabase requires SSL — ensure sslmode=require is in the URL
-    url = DATABASE_URL
-    if "sslmode" not in url:
-        sep = "&" if "?" in url else "?"
-        url = url + sep + "sslmode=require"
-    conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
+    """Open a psycopg2 connection whose cursors return _DictRow objects.
+
+    Parses DATABASE_URL with urllib.parse so that URL-encoded characters in
+    the password (e.g. %40 for @) are decoded correctly before psycopg2
+    receives them as plain text keyword arguments.
+    """
+    import urllib.parse
+    parsed = urllib.parse.urlparse(DATABASE_URL)
+    conn = psycopg2.connect(
+        host=parsed.hostname,
+        port=parsed.port or 5432,
+        dbname=(parsed.path or "/postgres").lstrip("/") or "postgres",
+        user=parsed.username,
+        password=urllib.parse.unquote(parsed.password or ""),
+        sslmode="require",
+        connect_timeout=15,
+        cursor_factory=psycopg2.extras.RealDictCursor,
+    )
     conn.autocommit = False
     return conn
-
 
 
 def get_connection():
