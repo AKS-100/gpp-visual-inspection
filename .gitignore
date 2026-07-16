@@ -29,7 +29,8 @@ scratch/
 artifacts/
 
 # ML models — trained weights included so Streamlit Cloud can run real inference
-# models/*.keras
+# models/*.keras   — included (29 MB, under GitHub 50 MB limit)
+# models/*.onnx    — included (ONNX export for Python 3.14 / onnxruntime)
 # models/*.h5
 models/*.pkl
 

@@ -1,9 +1,17 @@
 """
-ONNXInferenceEngine — runs the trained model via ONNX Runtime.
+ONNXInferenceEngine — runs the trained EfficientNetB0 model via ONNX Runtime.
 
 Works on Python 3.14 (unlike tensorflow-cpu which requires <=3.12).
-The .onnx model is converted once locally from the .keras file using
-the convert_to_onnx.py script, then committed to the repository.
+The .onnx model is converted from the .keras file using tf2onnx and committed
+to the repository so Streamlit Cloud can load it without TensorFlow.
+
+The conversion produces 3 graph inputs:
+  1. input_layer_2:0          — image tensor (batch, 224, 224, 3)
+  2. normalization_1/Sub/y:0  — normalization mean  (1, 1, 1, 3)  [constant]
+  3. normalization_1/Sqrt/x:0 — normalization variance (1, 1, 1, 3) [constant]
+
+The mean and variance are the standard ImageNet stats used during training
+and are hardcoded here so no Keras/TF dependency is needed at inference time.
 """
 
 import logging
@@ -14,6 +22,10 @@ import numpy as np
 from core.ml.inference_engine import PredictionResult
 
 logger = logging.getLogger(__name__)
+
+# ImageNet normalisation constants — extracted from the Keras Normalization layer
+_NORM_MEAN = np.array([[[[0.485, 0.456, 0.406]]]], dtype=np.float32)   # (1,1,1,3)
+_NORM_VAR  = np.array([[[[0.229, 0.224, 0.225]]]], dtype=np.float32)   # (1,1,1,3)
 
 
 class ONNXInferenceEngine:
@@ -29,7 +41,7 @@ class ONNXInferenceEngine:
         self._version_label = version_label
         self._confidence_threshold = confidence_threshold
         self._session = None
-        logger.info("ONNXInferenceEngine registered for lazy loading: %s", version_label)
+        logger.info("ONNXInferenceEngine registered (lazy load): %s", version_label)
 
     @property
     def _ort_session(self):
@@ -41,28 +53,49 @@ class ONNXInferenceEngine:
                 self._model_path,
                 providers=["CPUExecutionProvider"],
             )
-            logger.info("ONNX model loaded. Input: %s", self._session.get_inputs()[0].shape)
+            inputs = self._session.get_inputs()
+            logger.info(
+                "ONNX model loaded. %d input(s): %s",
+                len(inputs),
+                [i.name for i in inputs],
+            )
         return self._session
 
     def predict(self, image_path: str) -> PredictionResult:
         """Run inference using ONNX Runtime."""
         from core.ml.preprocessing import load_and_preprocess_image
 
-        preprocessed = load_and_preprocess_image(image_path)  # (1, 224, 224, 3) float32
+        preprocessed = load_and_preprocess_image(image_path)  # (1, 224, 224, 3)
         if preprocessed.dtype != np.float32:
             preprocessed = preprocessed.astype(np.float32)
 
         session = self._ort_session
-        input_name = session.get_inputs()[0].name
-        outputs = session.run(None, {input_name: preprocessed})
+        input_names = [inp.name for inp in session.get_inputs()]
 
-        # outputs[0] shape: (1, 2) — [prob_GOOD, prob_DEFECTIVE]
-        probs = outputs[0][0]
-        # label_encoder: {"GOOD": 0, "DEFECTIVE": 1}
-        defective_probability = float(probs[1]) if len(probs) > 1 else float(probs[0])
+        # Build feed dict.
+        # The converted model exposes the Normalization layer's constants as
+        # graph inputs — pass the hardcoded ImageNet mean & variance.
+        feed = {input_names[0]: preprocessed}
+        if len(input_names) >= 2:
+            feed[input_names[1]] = _NORM_MEAN   # Sub/y  — mean
+        if len(input_names) >= 3:
+            feed[input_names[2]] = _NORM_VAR    # Sqrt/x — variance
+
+        outputs = session.run(None, feed)
+
+        # Output shape is (batch, 1) — sigmoid probability of DEFECTIVE class
+        raw_prob = float(outputs[0][0][0])
+        defective_probability = raw_prob
 
         is_defective = defective_probability >= self._confidence_threshold
         confidence = defective_probability if is_defective else (1.0 - defective_probability)
+
+        logger.debug(
+            "ONNX predict: path=%s  p_defective=%.4f  result=%s  conf=%.4f",
+            image_path, defective_probability,
+            "DEFECTIVE" if is_defective else "GOOD",
+            confidence,
+        )
 
         return PredictionResult(
             prediction="DEFECTIVE" if is_defective else "GOOD",
