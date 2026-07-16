@@ -62,26 +62,43 @@ class Services:
 
 def build_ai_engine(defect_ids_pool: list[int]) -> AIInferenceEngine:
     """
-    Use the trained TensorFlow model if it exists on disk and TensorFlow is
-    importable; otherwise fall back to DummyInferenceEngine. This is what
-    makes TensorFlowInferenceEngine a true drop-in: nothing else in the
-    app needs to change once you train a model and place it at
-    models/industrial_quality_classifier.keras.
+    Load the best available inference engine in priority order:
+      1. ONNX model  (works on Python 3.14, preferred for cloud deployment)
+      2. TensorFlow .keras model (works on Python <=3.12)
+      3. DummyInferenceEngine (deterministic stub — always available)
     """
-    model_path = settings.paths.models_dir / "industrial_quality_classifier.keras"
-    if model_path.exists():
+    models_dir = settings.paths.models_dir
+
+    # ── 1. ONNX (Python 3.14 compatible) ──────────────────────────────────
+    onnx_path = models_dir / "industrial_quality_classifier.onnx"
+    if onnx_path.exists():
+        try:
+            from core.ml.onnx_inference_engine import ONNXInferenceEngine
+            logger.info("Using ONNXInferenceEngine from %s", onnx_path)
+            return ONNXInferenceEngine(
+                model_path=str(onnx_path),
+                version_label=f"onnx-industrial-classifier:{onnx_path.stat().st_mtime_ns}",
+            )
+        except Exception as exc:
+            logger.warning("ONNX engine failed to load (%s) — trying TensorFlow.", exc)
+
+    # ── 2. TensorFlow .keras ───────────────────────────────────────────────
+    keras_path = models_dir / "industrial_quality_classifier.keras"
+    if keras_path.exists():
         try:
             from core.ml.tensorflow_inference_engine import TensorFlowInferenceEngine
-
+            logger.info("Using TensorFlowInferenceEngine from %s", keras_path)
             return TensorFlowInferenceEngine(
-                model_path=str(model_path),
-                version_label=f"efficientnetb0-industrial-classifier:{model_path.stat().st_mtime_ns}",
+                model_path=str(keras_path),
+                version_label=f"efficientnetb0-industrial-classifier:{keras_path.stat().st_mtime_ns}",
             )
         except ImportError:
-            logging.getLogger(__name__).warning(
-                "Trained model found but TensorFlow isn't installed — falling back to DummyInferenceEngine."
-            )
+            logger.warning("Keras model found but TensorFlow not installed — trying ONNX conversion fallback.")
+
+    # ── 3. Dummy stub ──────────────────────────────────────────────────────
+    logger.warning("No trained model found — using DummyInferenceEngine.")
     return DummyInferenceEngine(defect_ids_pool=defect_ids_pool)
+
 
 
 @st.cache_resource(show_spinner=False)

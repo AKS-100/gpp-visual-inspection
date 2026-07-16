@@ -1,5 +1,5 @@
 streamlit>=1.36
-tensorflow-cpu>=2.16
+onnxruntime>=1.19
 psycopg2-binary>=2.9
 opencv-python-headless>=4.9
 scikit-learn>=1.4
